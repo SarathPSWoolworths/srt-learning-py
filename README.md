@@ -86,22 +86,103 @@ python3 app.py
 
 ---
 
-## 5. Test the API
+## 5. API Endpoints (Use and Output)
 
-Open a **new terminal** and run:
+Open a **new terminal** and run the following commands while the Flask server is running.
+
+### 5.1 `GET /health`
+
+**Use:** Quick health check to confirm the API is running.
 
 ```bash
 curl http://localhost:5000/health
 ```
 
-**Expected output:**
+**Expected output (HTTP 200):**
 ```json
 {
   "message": "Hello World"
 }
 ```
 
-Or open http://localhost:5000/health in your browser.
+You can also open http://localhost:5000/health in your browser.
+
+### 5.2 `GET /args`
+
+**Use:** Read URL query parameters.
+
+```bash
+curl "http://localhost:5000/args?name=sam&role=student"
+```
+
+**Expected output (HTTP 200):**
+```json
+{
+  "message": "Received query parameters",
+  "params": {
+    "name": "sam",
+    "role": "student"
+  }
+}
+```
+
+### 5.3 `POST /args` (JSON body)
+
+**Use:** Send values as JSON in the request body.
+
+```bash
+curl -X POST http://localhost:5000/args \
+  -H "Content-Type: application/json" \
+  -d '{"name":"sam","age":20}'
+```
+
+**Expected output (HTTP 200):**
+```json
+{
+  "message": "Received POST values",
+  "json": {
+    "name": "sam",
+    "age": 20
+  },
+  "form": {}
+}
+```
+
+### 5.4 `POST /args` (Form body)
+
+**Use:** Send values as form data (`application/x-www-form-urlencoded`).
+
+```bash
+curl -X POST http://localhost:5000/args \
+  -d "name=sam&age=20"
+```
+
+**Expected output (HTTP 200):**
+```json
+{
+  "message": "Received POST values",
+  "json": {},
+  "form": {
+    "name": "sam",
+    "age": "20"
+  }
+}
+```
+
+### 5.5 `GET /<unknown-path>` (Catch-all)
+
+**Use:** Any route not explicitly defined in the app returns a JSON 404 response.
+
+```bash
+curl http://localhost:5000/abc
+```
+
+**Expected output (HTTP 404):**
+```json
+{
+  "Error": "Path Not Found: abc"
+}
+```
 
 ---
 
@@ -111,7 +192,7 @@ Or open http://localhost:5000/health in your browser.
 srt-learning-py/
 ├── venv/              # Virtual environment (do not edit)
 ├── hello.py           # Interactive colored pyramid script
-├── app.py             # Flask API with /health endpoint
+├── app.py             # Flask API endpoints (/health, /args, catch-all 404)
 ├── requirements.txt   # Python package dependencies
 ├── .gitignore         # Files excluded from Git
 └── README.md          # This file
