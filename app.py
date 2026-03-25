@@ -3,7 +3,7 @@
 
 # --- STEP 1: Import Flask ---
 # "from flask import Flask" brings in the Flask class we need
-from flask import jsonify, Flask
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 # --- STEP 2: Create the app ---
@@ -23,7 +23,37 @@ CORS(app, resources={r"/*": {"origins": ["http://localhost:4200"]}})
 @app.route("/health")
 def health():
     # jsonify() converts a Python dictionary into a JSON response
-    return jsonify({"message": "Hello World"})
+    # 200 is the HTTP status code for "OK"
+    return jsonify({"message": "Hello World"}), 200
+
+# This route catches all other URLs that are not defined above.
+@app.route("/<path:path>")
+def catch_all(path):
+    # jsonify() converts a Python dictionary into a JSON response
+    # 404 is the HTTP status code for "Not Found"
+    return jsonify({"Error": "Path Not Found: " + path}), 404
+
+# This route demonstrates how to read GET query params and POST payload values.
+@app.route("/args", methods=["GET", "POST"])
+def index():
+    if request.method == "GET":
+        # Read key/value pairs from the URL query string, for example: /args?name=sam
+        query_params = request.args.to_dict(flat=True)
+        return (
+            jsonify({"message": "Received query parameters", "params": query_params}),
+            200,
+        )
+
+    # Read JSON body for requests sent as application/json.
+    json_body = request.get_json(silent=True) or {}
+    # Read form fields for requests sent as
+    # application/x-www-form-urlencoded or multipart/form-data.
+    form_body = request.form.to_dict(flat=True)
+    # Return both so you can see which POST format the client used.
+    return (
+        jsonify({"message": "Received POST values", "json": json_body, "form": form_body}),
+        200,
+    )
 
 # --- STEP 4: Run the app ---
 # This block only runs when you execute "python3 app.py" directly
