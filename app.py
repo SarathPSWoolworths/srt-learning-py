@@ -8,7 +8,10 @@ from flask_cors import CORS
 
 # --- STEP 2: Create the app ---
 # Flask(__name__) creates a new Flask application
-# __name__ tells Flask where to find your project files
+# __name__ is a special Python variable ("dunder name").
+# Dunder means double underscores before and after a name.
+# Python sets __name__ automatically for every module.
+# Flask uses it to locate project resources correctly.
 app = Flask(__name__)
 
 # Allow CORS only for Angular dev server running on localhost:4200.
@@ -26,5 +29,8 @@ def health():
 # This block only runs when you execute "python3 app.py" directly
 # debug=True auto-reloads the server when you change code (useful while learning)
 if __name__ == "__main__":
+    # "__main__" is the module name Python gives to the entry script.
+    # So this condition is True only when this file is run directly.
+    # If this file is imported from another file, this block will not run.
     # Starts the server on http://localhost:5000
     app.run(debug=True)
