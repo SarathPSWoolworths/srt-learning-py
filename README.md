@@ -43,17 +43,27 @@ pip install -r requirements.txt
 
 ---
 
-## 3. Run the Hello World Script
+## 3. Run the Interactive Pyramid Script
 
 ```bash
 # Make sure you're in the project folder
 python3 hello.py
 ```
 
-**Expected output:**
+**Expected behavior:**
 ```
-Hello World
+Enter a single character (or type 'exit'/'quit' to stop): *
+Enter pyramid length (1 to 50): 4
+Input symbol: *
+Pyramid length: 4
+Pyramid structure:
+  *
+  * *
+ * * *
+* * * *
 ```
+
+The script runs in a loop and only exits when you type `exit` or `quit`.
 
 ---
 
@@ -100,7 +110,7 @@ Or open http://localhost:5000/health in your browser.
 ```
 srt-learning-py/
 ├── venv/              # Virtual environment (do not edit)
-├── hello.py           # Simple Hello World script
+├── hello.py           # Interactive colored pyramid script
 ├── app.py             # Flask API with /health endpoint
 ├── requirements.txt   # Python package dependencies
 ├── .gitignore         # Files excluded from Git
